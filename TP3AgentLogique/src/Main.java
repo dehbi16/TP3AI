@@ -8,10 +8,22 @@ public class Main {
 		long lStartTime = System.currentTimeMillis();
 		Carte c = new Carte(n);
 		Capteur capteur = new Capteur();
+		Effecteur effecteur = new Effecteur();
 		capteur.setCapteur(c.getCaseObservable());
+		Agent agent = new Agent(c.getPositioni(), c.getPositionj(), etatAgent, Direction.Droite, null, n);
+		/*
+		while(true) {
+			agent.setCapteur(capteur);
+			agent.tick();
+			effecteur = agent.getEffecteur();
+			
+			c.setEffecteur(effecteur);
+			c.tick();
+			capteur.setCapteur(c.getCaseObservable());
+		}
 		
-		Agent agent = new Agent(c.getPositioni(), c.getPositionj(), etatAgent, Direction.Droite, capteur);
-		Effecteur effecteur = agent.getEffecteur();
+		*/
+		
 		/*
 		 * l'agent observe l'environnement grâce au capteur
 		 * on change l'effecteur

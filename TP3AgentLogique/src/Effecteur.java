@@ -7,6 +7,7 @@ public class Effecteur {
 	private boolean Arriere;
 	private boolean Tirer;
 	private boolean Sortir;
+	private Direction dTire;
 	
 	public Effecteur() {
 		this.Gauche = false;
@@ -15,6 +16,14 @@ public class Effecteur {
 		this.Arriere = false;
 		this.Tirer = false;
 		this.Sortir = false;		
+	}
+
+	public Direction getdTire() {
+		return dTire;
+	}
+
+	public void setdTire(Direction dTire) {
+		this.dTire = dTire;
 	}
 
 	public boolean isGauche() {

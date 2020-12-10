@@ -20,11 +20,69 @@ public class Carte {
 	
 	public void tick() {
 		
-		if (effecteur.isArriere()) positioni++;
-		if (effecteur.isAvant()) positioni--;
-		if (effecteur.isDroite()) positionj++;
-		if (effecteur.isGauche()) positionj--;
-		// Ajouter si l'agent à tirer ou non
+		if (effecteur.isArriere()) {
+			if(carte[positioni][positionj].getEtat()==State.agent) {
+				positioni++;
+				carte[positioni][positionj].setEtat(State.vide);
+			}
+			if(carte[positioni][positionj].getEtat()==State.agentM) {
+				positioni++;
+				carte[positioni][positionj].setEtat(State.mauvais);
+			}
+			if(carte[positioni][positionj].getEtat()==State.agentV) {
+				positioni++;
+				carte[positioni][positionj].setEtat(State.venteuse);
+			}
+		}
+		if (effecteur.isAvant()) {
+			if(carte[positioni][positionj].getEtat()==State.agent) {
+				positioni--;
+				carte[positioni][positionj].setEtat(State.vide);
+			}
+			if(carte[positioni][positionj].getEtat()==State.agentM) {
+				positioni--;
+				carte[positioni][positionj].setEtat(State.mauvais);
+			}
+			if(carte[positioni][positionj].getEtat()==State.agentV) {
+				positioni--;
+				carte[positioni][positionj].setEtat(State.venteuse);
+			}
+		}
+		if (effecteur.isDroite()){
+			if(carte[positioni][positionj].getEtat()==State.agent) {
+				positionj++;
+				carte[positioni][positionj].setEtat(State.vide);
+			}
+			if(carte[positioni][positionj].getEtat()==State.agentM) {
+				positionj++;
+				carte[positioni][positionj].setEtat(State.mauvais);
+			}
+			if(carte[positioni][positionj].getEtat()==State.agentV) {
+				positionj++;
+				carte[positioni][positionj].setEtat(State.venteuse);
+			}
+		}
+		if (effecteur.isGauche()){
+			if(carte[positioni][positionj].getEtat()==State.agent) {
+				positionj--;
+				carte[positioni][positionj].setEtat(State.vide);
+			}
+			if(carte[positioni][positionj].getEtat()==State.agentM) {
+				positionj--;
+				carte[positioni][positionj].setEtat(State.mauvais);
+			}
+			if(carte[positioni][positionj].getEtat()==State.agentV) {
+				positionj--;
+				carte[positioni][positionj].setEtat(State.venteuse);
+			} 
+		}
+		if(effecteur.isTirer()) {
+			Direction d = effecteur.getdTire();
+			if(d==Direction.Haut && carte[positioni-1][positionj].getEtat()==State.monstre) carte[positioni-1][positionj].setEtat(State.vide);
+			if(d==Direction.Bas && carte[positioni+1][positionj].getEtat()==State.monstre) carte[positioni+1][positionj].setEtat(State.vide);
+			if(d==Direction.Gauche && carte[positioni][positionj-1].getEtat()==State.monstre) carte[positioni][positionj-1].setEtat(State.vide);
+			if(d==Direction.Droite && carte[positioni][positionj+1].getEtat()==State.monstre) carte[positioni][positionj+1].setEtat(State.vide);
+		}
 		setCaseObservable();
 		
 	}

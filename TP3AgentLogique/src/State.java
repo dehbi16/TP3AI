@@ -4,9 +4,11 @@ public enum State {
 	agent("1"),
 	crevasse("2"),
 	venteuse("3"),
-	monstre("4"),
-	mauvais("5"),
-	sortie("6");
+	agentV("4"),
+	monstre("5"),
+	mauvais("6"),
+	agentM("7"),
+	sortie("8");
 	
 	private String name = "";
 

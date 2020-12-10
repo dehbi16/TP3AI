@@ -22,9 +22,9 @@ public class Agent {
 	}
 
 	public void tick() {
-		creerNewTableau();
-		actionPossible();
-		choisirAction();
+		creerNewTableau(); 
+		//actionPossible();
+		//choisirAction();
 		// agir();
 		if (capteur.isOdeur()==true) ancienCase = new Case(positionActuelle[0], positionActuelle[1], true, State.agentM);
 		if (capteur.isVent()==true) ancienCase = new Case(positionActuelle[0], positionActuelle[1], true, State.agentV);
@@ -33,11 +33,17 @@ public class Agent {
 
 	private void choisirAction() {
 		// utiliser le tableau des voisins est créer la liste des actions possibles 
+		// on ajoute les actions qui amene l'agent vers une case vide ou odeur ou vent ou visited ou la direction ou on peut tuer le monstre
 	}
 
 	private void actionPossible() {
 		// choisir une action la moins couteuse parmi les actions de la liste actionPossible 
-
+		// l'ordre de préférence
+		// 1) case non visitée
+		// 2) case odeur 
+		// 3) case vent 
+		// 4) case  visitée
+		// 5) tuer le monstre
 
 	}
 
@@ -317,8 +323,9 @@ public class Agent {
 				this.voisins[Direction.Direction2Integer(d)].setVide(true);
 			}
 
-
+			this.voisins = newVoisin;
 		}
+		
 	}
 
 	private Voisin[] initVoisin() {

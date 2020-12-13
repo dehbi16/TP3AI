@@ -4,14 +4,16 @@ public class Carte {
 	private Case [][] carte;
 	private double pc = 0.075;
 	private double pm = 0.08;
-	private Case caseObservable;
+	private Case caseObservable ;
 	private Effecteur effecteur;
 	private int positioni;
 	private int positionj;
+	private int etatAgent;
 
-	public Carte(int n) {
+	public Carte(int n, int etatAgent) {
 		this.n = n;
 		this.carte = new Case [n][n]; 
+		this.etatAgent = etatAgent;
 		init();
 		generer();
 		afficher();
@@ -19,63 +21,6 @@ public class Carte {
 	}
 	
 	public void tick() {
-		
-		if (effecteur.isArriere()) {
-			if(carte[positioni][positionj].getEtat()==State.agent) {
-				positioni++;
-				carte[positioni][positionj].setEtat(State.vide);
-			}
-			if(carte[positioni][positionj].getEtat()==State.agentM) {
-				positioni++;
-				carte[positioni][positionj].setEtat(State.mauvais);
-			}
-			if(carte[positioni][positionj].getEtat()==State.agentV) {
-				positioni++;
-				carte[positioni][positionj].setEtat(State.venteuse);
-			}
-		}
-		if (effecteur.isAvant()) {
-			if(carte[positioni][positionj].getEtat()==State.agent) {
-				positioni--;
-				carte[positioni][positionj].setEtat(State.vide);
-			}
-			if(carte[positioni][positionj].getEtat()==State.agentM) {
-				positioni--;
-				carte[positioni][positionj].setEtat(State.mauvais);
-			}
-			if(carte[positioni][positionj].getEtat()==State.agentV) {
-				positioni--;
-				carte[positioni][positionj].setEtat(State.venteuse);
-			}
-		}
-		if (effecteur.isDroite()){
-			if(carte[positioni][positionj].getEtat()==State.agent) {
-				positionj++;
-				carte[positioni][positionj].setEtat(State.vide);
-			}
-			if(carte[positioni][positionj].getEtat()==State.agentM) {
-				positionj++;
-				carte[positioni][positionj].setEtat(State.mauvais);
-			}
-			if(carte[positioni][positionj].getEtat()==State.agentV) {
-				positionj++;
-				carte[positioni][positionj].setEtat(State.venteuse);
-			}
-		}
-		if (effecteur.isGauche()){
-			if(carte[positioni][positionj].getEtat()==State.agent) {
-				positionj--;
-				carte[positioni][positionj].setEtat(State.vide);
-			}
-			if(carte[positioni][positionj].getEtat()==State.agentM) {
-				positionj--;
-				carte[positioni][positionj].setEtat(State.mauvais);
-			}
-			if(carte[positioni][positionj].getEtat()==State.agentV) {
-				positionj--;
-				carte[positioni][positionj].setEtat(State.venteuse);
-			} 
-		}
 		if(effecteur.isTirer()) {
 			Direction d = effecteur.getdTire();
 			if(d==Direction.Haut && carte[positioni-1][positionj].getEtat()==State.monstre) carte[positioni-1][positionj].setEtat(State.vide);
@@ -83,7 +28,21 @@ public class Carte {
 			if(d==Direction.Gauche && carte[positioni][positionj-1].getEtat()==State.monstre) carte[positioni][positionj-1].setEtat(State.vide);
 			if(d==Direction.Droite && carte[positioni][positionj+1].getEtat()==State.monstre) carte[positioni][positionj+1].setEtat(State.vide);
 		}
+		else {
+			enleverAgent(positioni, positionj);
+			if (effecteur.isArriere()) positioni++;
+			if (effecteur.isAvant()) positioni--;
+			if (effecteur.isDroite()) positionj++;
+			if (effecteur.isGauche()) positionj--;
+			if (this.carte[positioni][positionj].getEtat() == State.monstre || this.carte[positioni][positionj].getEtat() == State.crevasse) this.etatAgent=0;
+			ajouterAgent(positioni, positionj);
+		}
+		
+		
+
+
 		setCaseObservable();
+		afficher();
 		
 	}
 
@@ -102,7 +61,12 @@ public class Carte {
 		}
 	}
 
-	void generer() {
+	public boolean isAlive() {
+		if (this.etatAgent == 0) return false;
+		return true;
+	}
+
+	private void generer() {
 		int i,j;
 		int nbechecs = 0;
 		int nbCrevasse = (int) ((n*n)*pc);
@@ -146,7 +110,7 @@ public class Carte {
 		carte[i][j].setEtat(State.agent);
 		positioni = i;
 		positionj = j;
-		caseObservable = carte[i][j];
+		caseObservable = new Case(i, j, true, State.agent);
 		
 
 		// Ajouter une sortie
@@ -155,6 +119,18 @@ public class Carte {
 			j = (int)(Math.random()*n+1) - 1;
 		}while(carte[i][j].getEtat()!=State.vide);
 		carte[i][j].setEtat(State.sortie);
+	}
+	
+	private void enleverAgent(int i, int j) {
+		if (carte[i][j].getEtat()==State.agent) carte[i][j].setEtat(State.vide);
+		if (carte[i][j].getEtat()==State.agentM) carte[i][j].setEtat(State.mauvais);
+		if (carte[i][j].getEtat()==State.agentV) carte[i][j].setEtat(State.venteuse);
+	}
+	
+	private void ajouterAgent(int i, int j) {
+		if (carte[i][j].getEtat()==State.vide) carte[i][j].setEtat(State.agent);
+		if (carte[i][j].getEtat()==State.mauvais) carte[i][j].setEtat(State.agentM);
+		if (carte[i][j].getEtat()==State.venteuse) carte[i][j].setEtat(State.agentV);
 	}
 
 	public int getPositioni() {

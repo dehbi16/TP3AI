@@ -14,9 +14,31 @@ public class Capteur {
 	}
 	
 	public void setCapteur(Case c) {
-		if(c.getEtat()==State.mauvais) this.odeur=true;
-		if(c.getEtat()==State.venteuse) this.Vent=true;
+		
+		this.odeur = false;
+		this.Vent = false;
+		this.Lumiere = false;
+		if(c.getEtat()==State.mauvais || c.getEtat()==State.agentM) this.odeur=true;
+		if(c.getEtat()==State.venteuse || c.getEtat()==State.agentV) this.Vent=true;
 		if(c.getEtat()==State.sortie) this.Lumiere=true;
+	}
+	
+
+	public void setOdeur(boolean odeur) {
+		this.odeur = odeur;
+	}
+	
+	public void setVent(boolean vent) {
+		this.Vent = vent;
+	}
+	
+	public void setLumiere(boolean lumiere) {
+		this.Lumiere = lumiere;
+	}
+
+	@Override
+	public String toString() {
+		return "Capteur [odeur=" + odeur + ", Vent=" + Vent + ", Lumiere=" + Lumiere + "]";
 	}
 
 	public boolean isOdeur() {

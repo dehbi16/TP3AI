@@ -11,7 +11,7 @@ public class Voisin {
 	private boolean crevasse;
 	
 	public Voisin() {
-		this.existe = false;
+		this.existe = true;
 		this.visited = false;
 		this.odeur = false;
 		this.vent = false;
@@ -20,6 +20,13 @@ public class Voisin {
 		this.crevasseP = false;
 		this.monstre = false;
 		this.crevasse = false;
+	}
+
+	@Override
+	public String toString() {
+		return "Voisin [existe=" + existe + ", visited=" + visited + ", odeur=" + odeur + ", vent=" + vent + ", vide="
+				+ vide + ", monstreP=" + monstreP + ", crevasseP=" + crevasseP + ", monstre=" + monstre + ", crevasse="
+				+ crevasse + "]";
 	}
 
 	public boolean isExiste() {

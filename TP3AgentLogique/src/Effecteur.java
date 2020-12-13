@@ -17,6 +17,36 @@ public class Effecteur {
 		this.Tirer = false;
 		this.Sortir = false;		
 	}
+	
+	public Effecteur(Direction d) {
+		this.Gauche = false;
+		this.Droite = false;
+		this.Avant = false;
+		this.Arriere = false;
+		this.Tirer = false;
+		this.Sortir = false;
+		if (d == Direction.Bas) this.Arriere = true;
+		if (d == Direction.Haut) this.Avant = true;
+		if (d == Direction.Gauche) this.Gauche = true;
+		if (d == Direction.Droite) this.Droite = true;
+	}
+
+	public boolean Comparer(Effecteur e) {
+		if (this.Arriere == true && e.Avant == true) return false;
+		if (this.Avant == true && e.Arriere == true) return false;
+		if (this.Gauche == true && e.Droite == true) return false;
+		if (this.Droite == true && e.Gauche == true) return false;
+		return true;
+	}
+	
+	public String toString() {
+		if (this.Arriere) return "Bas";
+		if (this.Avant) return "Haut";
+		if (this.Droite) return "droite";
+		if (this.Gauche) return "gauche";
+		return "Tirer";
+		
+	}
 
 	public Direction getdTire() {
 		return dTire;

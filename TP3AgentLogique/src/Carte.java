@@ -9,6 +9,7 @@ public class Carte {
 	private int positioni;
 	private int positionj;
 	private int etatAgent;
+	public Foret foret;
 
 	public Carte(int n, int etatAgent) {
 		this.n = n;
@@ -34,6 +35,8 @@ public class Carte {
 			if (effecteur.isAvant()) positioni--;
 			if (effecteur.isDroite()) positionj++;
 			if (effecteur.isGauche()) positionj--;
+			System.out.println(positioni);
+			System.out.println(positionj);
 			if (this.carte[positioni][positionj].getEtat() == State.monstre || this.carte[positioni][positionj].getEtat() == State.crevasse) this.etatAgent=0;
 			ajouterAgent(positioni, positionj);
 		}
@@ -47,9 +50,12 @@ public class Carte {
 	}
 
 	private void init() {
+		foret = new Foret(n);
 		for (int i=0; i<n; i++) 
-			for(int j=0; j<n; j++) 
+			for(int j=0; j<n; j++) {
 				carte[i][j] = new Case(i, j, false, State.vide);
+				foret.placementItem(i, j, "10"); // 10 = case noire
+			}
 	}
 	
 	private void afficher() {
@@ -108,6 +114,7 @@ public class Carte {
 			j = (int)(Math.random()*n+1) - 1;
 		}while(carte[i][j].getEtat()!=State.vide);
 		carte[i][j].setEtat(State.agent);
+		foret.placementItem(i, j, "1"); // 1 = agent
 		positioni = i;
 		positionj = j;
 		caseObservable = new Case(i, j, true, State.agent);
@@ -119,18 +126,40 @@ public class Carte {
 			j = (int)(Math.random()*n+1) - 1;
 		}while(carte[i][j].getEtat()!=State.vide);
 		carte[i][j].setEtat(State.sortie);
+		foret.placementItem(i, j, "6"); // 6 = portail
 	}
 	
 	private void enleverAgent(int i, int j) {
-		if (carte[i][j].getEtat()==State.agent) carte[i][j].setEtat(State.vide);
-		if (carte[i][j].getEtat()==State.agentM) carte[i][j].setEtat(State.mauvais);
-		if (carte[i][j].getEtat()==State.agentV) carte[i][j].setEtat(State.venteuse);
+		if (carte[i][j].getEtat()==State.agent) {
+			carte[i][j].setEtat(State.vide);
+			foret.enlevementItem(i, j);
+		}
+		if (carte[i][j].getEtat()==State.agentM) {
+			carte[i][j].setEtat(State.mauvais);
+			foret.placementItem(i, j, "5");
+		}
+		if (carte[i][j].getEtat()==State.agentV) {
+			carte[i][j].setEtat(State.venteuse);
+			foret.placementItem(i, j, "4");
+		}
 	}
 	
 	private void ajouterAgent(int i, int j) {
-		if (carte[i][j].getEtat()==State.vide) carte[i][j].setEtat(State.agent);
-		if (carte[i][j].getEtat()==State.mauvais) carte[i][j].setEtat(State.agentM);
-		if (carte[i][j].getEtat()==State.venteuse) carte[i][j].setEtat(State.agentV);
+		if (carte[i][j].getEtat()==State.vide) {
+			carte[i][j].setEtat(State.agent);
+			foret.placementItem(i, j, "1");
+		}
+		if (carte[i][j].getEtat()==State.mauvais) {
+			carte[i][j].setEtat(State.agentM);
+			foret.placementItem(i, j, "8"); // 8 = agent + odeur
+		}
+		if (carte[i][j].getEtat()==State.venteuse) {
+			carte[i][j].setEtat(State.agentV);
+			foret.placementItem(i, j, "7"); // 7 = agent + vent
+		}
+		if (carte[i][j].getEtat()==State.sortie) {
+			foret.placementItem(i, j, "9"); // 7 = agent + portail
+		}
 	}
 
 	public int getPositioni() {
@@ -165,10 +194,19 @@ public class Carte {
 
 	private void ajouterM(int i, int j) {
 		carte[i][j].setEtat(State.monstre);
-		if (i!=0) carte[i-1][j].setEtat(State.mauvais);
-		if (i!=n-1) carte[i+1][j].setEtat(State.mauvais);
-		if (j!=0) carte[i][j-1].setEtat(State.mauvais);
-		if (j!=n-1) carte[i][j+1].setEtat(State.mauvais);
+		foret.placementItem(i, j, "2"); // 2 = monstre
+		if (i!=0) {
+			carte[i-1][j].setEtat(State.mauvais);
+		}
+		if (i!=n-1) {
+			carte[i+1][j].setEtat(State.mauvais);
+		}
+		if (j!=0) {
+			carte[i][j-1].setEtat(State.mauvais);
+		}
+		if (j!=n-1) {
+			carte[i][j+1].setEtat(State.mauvais);
+		}
 
 	}
 
@@ -183,11 +221,20 @@ public class Carte {
 	}
 
 	private void ajouterC(int i, int j) {
-		carte[i][j].setEtat(State.crevasse); 
-		if (i!=0) carte[i-1][j].setEtat( State.venteuse);
-		if (i!=n-1) carte[i+1][j].setEtat( State.venteuse);
-		if (j!=0) carte[i][j-1].setEtat( State.venteuse);
-		if (j!=n-1) carte[i][j+1].setEtat( State.venteuse);
+		carte[i][j].setEtat(State.crevasse);
+		foret.placementItem(i, j, "3"); // 3 = crevasse
+		if (i!=0) {
+			carte[i-1][j].setEtat( State.venteuse);
+		}
+		if (i!=n-1) {
+			carte[i+1][j].setEtat( State.venteuse);
+		}
+		if (j!=0) {
+			carte[i][j-1].setEtat( State.venteuse);
+		}
+		if (j!=n-1) {
+			carte[i][j+1].setEtat( State.venteuse);
+		}
 	}
 
 	private boolean ajouterCPossible(int i, int j) {

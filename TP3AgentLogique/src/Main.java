@@ -2,14 +2,12 @@ import java.util.concurrent.TimeUnit;
 
 public class Main {
 
+	
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-		 
-		
+	
 		int i=0;
 		int fois = 30;
-		int n =5;
+		int n = 3;
 		int etatAgent = 1;
 		
 		while(true) {

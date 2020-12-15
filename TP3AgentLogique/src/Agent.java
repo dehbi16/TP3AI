@@ -29,6 +29,7 @@ public class Agent {
 	public void tick() {
 		if (this.capteur.isLumiere()) {
 			this.etat = 2;
+			this.effecteur = new Effecteur();
 		}
 		else {
 			creerNewTableau(); 

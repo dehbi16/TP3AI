@@ -19,7 +19,7 @@ public class Main {
 			
 			while(i<fois && c.isAlive()==true && agent.getEtat()==1) {
 				try {
-					TimeUnit.SECONDS.sleep(1);
+					TimeUnit.SECONDS.sleep(2);
 				} catch (InterruptedException e) {
 
 					e.printStackTrace();

@@ -30,7 +30,7 @@ public class Foret extends JFrame{
 		this.taille = taille;
 		mesCases = new JButton[taille][taille];
 		setTitle("Foret");
-		setSize(900,900);
+		setSize(700,500);
 		setLayout(new GridLayout(taille,taille));
 		Container c = getContentPane();
 		System.out.println(taille);

@@ -2,8 +2,8 @@
 public class Carte {
 	private int n;
 	private Case [][] carte;
-	private double pc = 0.075;
-	private double pm = 0.08;
+	private double pc = 0.075;// probabilité  pour la crevasse
+	private double pm = 0.08;// proba pour les monstres
 	private Case caseObservable ;
 	private Effecteur effecteur;
 	private int positioni;
@@ -158,7 +158,7 @@ public class Carte {
 			foret.placementItem(i, j, "7"); // 7 = agent + vent
 		}
 		if (carte[i][j].getEtat()==State.sortie) {
-			foret.placementItem(i, j, "9"); // 7 = agent + portail
+			foret.placementItem(i, j, "9"); // 9 = agent + portail
 		}
 	}
 
